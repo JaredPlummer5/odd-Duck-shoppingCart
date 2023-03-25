@@ -2,6 +2,10 @@
 
 'use strict';
 
+/* global Product, Cart */
+
+'use strict';
+
 // Set up an empty cart for use on this page.
 state.cart = new Cart([]);
 
@@ -10,9 +14,13 @@ state.cart = new Cart([]);
 function populateForm() {
 
   //TODO: Add an <option> tag inside the form's select for each product
-  const selectElement = document.getElementById('items');
-  for (let i in state.allProducts) {
+  const selectElementForTheForm = document.getElementById('items');
 
+  for (let i in state.allProducts) {
+    let OptionsForItems = document.createElement("option")
+    let NamesOfProducts = state.allProducts[i].name
+    OptionsForItems.innerHTML = NamesOfProducts
+    selectElementForTheForm.append(OptionsForItems)
   }
 
 }
@@ -23,7 +31,7 @@ function populateForm() {
 function handleSubmit(event) {
 
   // TODO: Prevent the page from reloading
-
+  event.preventDefault()
   // Do all the things ...
   addSelectedItemToCart();
   state.cart.saveToLocalStorage();
@@ -34,15 +42,38 @@ function handleSubmit(event) {
 
 // TODO: Add the selected item and quantity to the cart
 function addSelectedItemToCart() {
-  // TODO: suss out the item picked from the select list
-  // TODO: get the quantity
-  // TODO: using those, add one item to the Cart
+  //TODO: suss out the item picked from the select list
+  let SelectedItem = document.querySelector("select").value
+  for (let i = 0; i < state.allProducts.length; i++) {
+    if (state.allProducts[i].name === SelectedItem) {
+      let InputValueOfQuanity = document.getElementById("quantity").value
+      // TODO: get the quantity
+      // TODO: using those, add one item to the Cart
+      let UserAddedProduct = new CartItem(SelectedItem, InputValueOfQuanity)
+      console.log(UserAddedProduct)
+      state.cart.items.push(UserAddedProduct)
+      console.log(state.cart.items)
+    }
+  }
 }
 
 // TODO: As you add items into the cart, show them (item & quantity) in the cart preview div
 function updateCartPreview() {
   // TODO: Get the item and quantity from the form
+  let InputValueOfQuanity = document.getElementById("quantity").value
+  let SelectedItem = document.querySelector("select").value
+
   // TODO: Add a new element to the cartContents div with that information
+  let cartContentsDiv = document.getElementById("cartContents");
+  for (let i = 0; i < state.allProducts.length; i++) {
+    if (state.allProducts[i].name === SelectedItem) {
+      for (let j = 0; j < InputValueOfQuanity; j++) {
+        let ImageForProductSelected = document.createElement("img");
+        ImageForProductSelected.src = state.allProducts[i].filePath;
+        cartContentsDiv.append(ImageForProductSelected)
+      }
+    }
+  }
 }
 
 // Set up the "submit" event listener on the form.

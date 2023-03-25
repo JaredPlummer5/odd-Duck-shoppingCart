@@ -14,19 +14,31 @@ const Cart = function(items) {
 
 Cart.prototype.addItem = function(product, quantity) {
   // TODO: Fill in this instance method to create a new CartItem and add it to this.items
+  let newItem = new CartItem(product, quantity);
+  this.item.push(newItem);
 };
 
 Cart.prototype.saveToLocalStorage = function() {
   // TODO: Fill in this instance method to save the contents of the cart to localStorage
+  let cartString = JSON.stringify(state.cart.items)
+  localStorage.setItem('cart', cartString);
 };
 
 Cart.prototype.removeItem = function(item) {
   // TODO: Fill in this instance method to remove one item from the cart.
+  let cartItem = this.item.filter(function(currentItem){
+    return item.name == currentItem.name;
+  });
+console.log(cartItem)
+
+  this.items = cartItem;
   // Note: You will have to decide what kind of parameter to pass in here!
-};
+}
 
 Cart.prototype.updateCounter = function() {
   // TODO: Update the cart count in the header nav with the number of items in the Cart
+  let cartCount = document.getElementById("itemCount");
+  cartCount.innerHTML = this.items.length;
 }
 
 const CartItem = function(product, quantity) {
@@ -65,3 +77,5 @@ function generateCatalog() {
 
 // Initialize the app by creating the big list of products with images and names
 generateCatalog();
+
+
